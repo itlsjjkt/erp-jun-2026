@@ -934,12 +934,15 @@ class PurchaseRequestController extends Controller
             $end   = \Carbon\Carbon::createFromFormat('m/d/Y', $data['end_date'])->endOfDay();
             $diff  = $start->diffInDays($end);
 
-            if ($diff > 31) {
-                return redirect()->back()->with('error', 'Rentang waktu tidak boleh lebih dari 31 hari. (Terpilih: ' . $diff . ' hari)');
+            if(Auth::user()->id != 1){
+                if ($diff > 31) {
+                    return redirect()->back()->with('error', 'Rentang waktu tidak boleh lebih dari 31 hari. (Terpilih: ' . $diff . ' hari)');
+                }
+                if ($start->gt($end)) {
+                    return redirect()->back()->with('error', 'Tanggal mulai tidak boleh melebihi tanggal selesai.');
+                }
             }
-            if ($start->gt($end)) {
-                return redirect()->back()->with('error', 'Tanggal mulai tidak boleh melebihi tanggal selesai.');
-            }
+
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Format tanggal salah. Gunakan format MM/DD/YYYY.');
         }

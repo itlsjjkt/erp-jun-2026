@@ -20,6 +20,7 @@ Route::middleware('erp.key')->group(function () {
     Route::get('/users/lookup', [ErpUserApiController::class, 'lookup']);
 
     // Master Data
+    Route::get('item-details', [MasterDataAPIController::class, 'getItemDetails']);
     Route::get('products', [MasterDataAPIController::class, 'products']);
     Route::get('companies', [MasterDataAPIController::class, 'companies']);
     Route::get('measures', [MasterDataAPIController::class, 'measures']);
