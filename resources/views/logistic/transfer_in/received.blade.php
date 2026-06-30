@@ -129,7 +129,7 @@
                                         <input type="number" class="form-control text-center" value="{{$item->status == 2 ? $item->qty_parsial : $item->qty}}" name="qty[]" id="qty_{{$item->id}}" onwheel="return false;" readonly>
                                     </td>
                                     <td class="text-center">{{ $item->productunit }}</td>
-                                    <td>{!! Form::textarea('notes[]', old('notes'), ['class' => 'form-control', 'rows' => 2, 'placeholder' => '']) !!}</td>
+                                    <td>{!! Form::textarea('notes['.$loop->index.']', old('notes.'.$loop->index), ['class' => 'form-control', 'rows' => 2, 'placeholder' => '']) !!}</td>
                                 </tr>
                             @endforeach
                         </tbody>

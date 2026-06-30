@@ -91,12 +91,12 @@
                                 <small>PN/SPEC: {{ $item->productpartnumber }} </small></td>
                             <td class="text-center">{{ $item->stock_onhand }}</td>
                             <td>
-                                <input type="number" name="qty[]" class="form-control text-right" id='qty_transfer_{{$item->id}}' value="{{$item->qty}}" min="1" oninput="this.value = Math.abs(this.value)" onwheel="return false;">
+                                <input type="number" name="qty[]" class="form-control text-right" id='qty_transfer_{{$item->id}}' value="{{$item->qty}}" min="0.01" step="0.01" oninput="if (this.valueAsNumber < 0) this.value = Math.abs(this.valueAsNumber)" onwheel="return false;">
                                 <input type="hidden" id='qty_stock_{{$item->id}}' value="{{$item->stock_onhand}}">
                             </td>
                             <td class="text-left">{{ $item->productunit }}</td>
                             <td>
-                                {!! Form::textarea('notes[]', $item->notes, ['class' => 'form-control', 'rows' => 2, 'placeholder' => '']) !!}
+                                {!! Form::textarea('notes['.$loop->index.']', old('notes.'.$loop->index, $item->notes), ['class' => 'form-control', 'rows' => 2, 'placeholder' => '']) !!}
                             </td>
                         </tr>
                     @endforeach
@@ -123,7 +123,7 @@
             $('#qty_transfer_{{$item->id}}').on('keyup', function(e) {
                 var qty_transfer  = $('#qty_transfer_{{$item->id}}').val();
                 var qty_stock = $('#qty_stock_{{$item->id}}').val();
-                if(parseInt(qty_transfer) > parseInt(qty_stock)){
+                if(parseFloat(qty_transfer) > parseFloat(qty_stock)){
                     e.preventDefault();
                     Swal.fire(
                     'Peringatan!',

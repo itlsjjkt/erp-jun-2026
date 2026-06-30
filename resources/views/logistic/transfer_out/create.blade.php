@@ -130,7 +130,7 @@
                                 <td>
                                     <input type="hidden" value="{{ $item->stock_onhand }}" id='qty_stock_{{$item->id}}'>
                                     <div class="input-group">
-                                        <input type="number" name="qty[]" class="form-control text-center" id='qty_{{$item->id}}' value="" placeholder="0" min="1" oninput="this.value = Math.abs(this.value)" onwheel="return false;">
+                                        <input type="number" name="qty[]" class="form-control text-center" id='qty_{{$item->id}}' value="" placeholder="0" min="0.01" step="0.01" oninput="if (this.valueAsNumber < 0) this.value = Math.abs(this.valueAsNumber)" onwheel="return false;">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">{{$item->unit}}</span>
                                         </div>
@@ -151,7 +151,7 @@
                                 {{-- <td class="text-center">
                                 </td> --}}
                                 <td>
-                                    {!! Form::textarea('notes[]', old('notes'), ['class' => 'form-control', 'rows' => 2, 'placeholder' => '']) !!}
+                                    {!! Form::textarea('notes['.$loop->index.']', old('notes.'.$loop->index), ['class' => 'form-control', 'rows' => 2, 'placeholder' => '']) !!}
                                 </td>
                             </tr>
                         @endforeach
@@ -300,7 +300,7 @@
             $('#qty_{{$item->id}}').on('keyup', function(e) {
                 var qty = $('#qty_{{$item->id}}').val();
                 var qty_stock = $('#qty_stock_{{$item->id}}').val();
-                if(parseInt(qty) > parseInt(qty_stock)){
+                if(parseFloat(qty) > parseFloat(qty_stock)){
                     e.preventDefault();
                     Swal.fire(
                     'Peringatan!',
