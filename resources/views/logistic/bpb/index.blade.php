@@ -67,6 +67,7 @@
                         <th>No. SPB</th>
                         <th>Penerima</th>
                         <th>Status</th>
+                        <th>Status Verifikasi</th>
                         <th>Tgl Input</th>
                         <th></th>
                     </tr>
@@ -93,10 +94,11 @@
                     {data: 'noSPB',  name: 'spb.doc_no'},
                     {data: 'received_by', name: 'received_by'},
                     {data: 'status', name: 'status', searchable: false},
+                    {data: 'status_verifikasi', name: 'status_verifikasi', searchable: false, orderable: false},
                     {data: 'created_at', name: 'created_at', searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ],
-                "order": [[ 4, "DESC" ]]
+                "order": [[ 5, "DESC" ]]
             });
 
             $('#btn-filter').click( function() {

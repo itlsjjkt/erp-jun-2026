@@ -53,7 +53,7 @@ class LpbController extends Controller
                     $location = DB::table('locations')->orderBy('name','ASC')->get()->pluck('name', 'id')->prepend('Silahkan pilih...', '');
                 }
             }
-    
+
             return view('logistic.lpb.index',compact('location'));
         }else{
             return abort(401);
@@ -68,7 +68,7 @@ class LpbController extends Controller
 
             if(isAdministrator() || isAdmin() || Gate::allows('lpb_monitoring')) $result  = Lpb::getData($data);
             else $result = Lpb::getData($data, Auth::user()->id);
-    
+
            return  DataTables::of($result)
             ->addColumn('action', function ($result) {
                 $url_edit = "<a href='".route('logistic.lpb.edit',Hashids::encode($result->id))."' title='".trans('Edit')."' data-toggle='tooltip' class='btn btn-outline'><span class='ti-pencil icon-lg'></span> </a>";
@@ -91,8 +91,8 @@ class LpbController extends Controller
                     </button>
                 </form>";
                 $url_upload = '<button title="Upload Dokumen" class="btn btn-sm btn_upload_dokumen_lpb fw-bold" style="background-color: transparent;" data-toggle="modal" data-target="#modalUploadDokumenLpb" data-id="' .  Hashids::encode($result->id) . '"><i class="ti-upload icon-lg"></i></button>';
-    
-    
+
+
                 if(GATE::allows('lpb_monitoring')){
                     return '<div class="btn-group">'.$url_view.'</div>';
                 }else{
@@ -112,11 +112,20 @@ class LpbController extends Controller
             ->editColumn('status', function ($result) {
                 return getStatusLPB($result->status,$result->spb_status);
             })
+            ->addColumn('status_verifikasi', function ($result) {
+                if ($result->verified_at) {
+                    return '<span class="badge badge-success"><i class="ti-check mr-1"></i>Terverifikasi</span>';
+                }
+                if ($result->verify_request_at) {
+                    return '<span class="badge badge-warning"><i class="ti-comment-alt mr-1"></i>Perlu Perbaikan</span>';
+                }
+                return '<span class="badge badge-secondary">Belum Diverifikasi</span>';
+            })
             ->editColumn('created_by', function ($result) {
                 return getUserByID($result->created_by);
             })
-    
-            ->rawColumns(['action', 'status','created_by'])
+
+            ->rawColumns(['action', 'status','status_verifikasi','created_by'])
             ->make(true);
         }else{
             return abort(401);
@@ -175,27 +184,27 @@ class LpbController extends Controller
                     ->where('location_id', $request->get('location_id'))
                     ->where('status','!=', 0)
                     ->get();
-    
+
                 $num = sprintf("%'.05d", count($increment) + 1) ;
-    
+
                 $no_lpb = "LPB-". $request->get('companyCode')."-". $request->get('locationCode')."-".date('my')."-".$num;
                 $data['status']    = 1;
                 $data['publish']   = date('Y-m-d H:i:s');
-    
+
             } else{
                 $no_lpb = "LPB-". $request->get('companyCode')."-". $request->get('locationCode')."-".date('my')."-DRAFT";
                 $data['status']        = 0;
                 $dataHistory['jenis']  = 'draft';
             }
-    
+
             $data['received_by']    = $request->get('received_by');
             $data['doc_no']         = $no_lpb;
             $data['po_id']          = $request->get('po_id');
             $data['created_by']     = Auth::user()->id;
             $data['location_id']    = $request->get('location_id');
 
-            $data['verified_by']     = Auth::user()->id;
-            $data['verified_at']     = now();
+            // $data['verified_by']     = Auth::user()->id;
+            // $data['verified_at']     = now();
 
             $lpb = Lpb::create($data);
 
@@ -567,10 +576,10 @@ class LpbController extends Controller
             $query = "location_id=".$request->get('location_id')."&start_date=".$request->get('start_date')."&end_date=". $request->get('end_date');
             $data = $request->all();
             $search = "Cari Berdasarkan: ";
-    
+
             if($request->input('location_id')) $search .= "<strong> Lokasi: </strong>".getDataByID('locations',$request->input('location_id'))->name;
             $search .= "<strong> Periode: </strong>".$request->input('start_date'). " - ". $request->input('end_date');
-    
+
             if(isAdministrator()){
                 $location    = DB::table('locations')
                 ->selectRaw("CONCAT (locations.name,' - ', companies.alias) as name, locations.id")
@@ -583,7 +592,7 @@ class LpbController extends Controller
             }else{
                 $location = DB::table('locations')->where('id', Auth::user()->location_id)->orderBy('name','ASC')->get()->pluck('name', 'id')->prepend('Silahkan pilih...', '');
             }
-    
+
             return view('logistic.lpb.search', compact('data','location', 'search','query'));
         }else{
             return abort(401);
@@ -606,11 +615,11 @@ class LpbController extends Controller
     public function detail($id)
     {
         if (Gate::allows('lpb') || Gate::allows('lpb_monitoring')) {
-            
+
             $lpb         = Lpb::getByID($id);
             $lpb_items   = Lpb::getProductItem($id);
             $lpb_history = Lpb::getHistory($id);
-    
+
             return view('logistic.lpb.detail', compact('lpb', 'lpb_items','lpb_history'))->renderSections()['content'];
 
         }else{

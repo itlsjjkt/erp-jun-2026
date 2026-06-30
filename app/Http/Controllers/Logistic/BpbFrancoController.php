@@ -90,10 +90,19 @@ class BpbFrancoController extends Controller
             ->editColumn('status', function ($result) {
                 return getStatusData($result->status);
             })
+            ->addColumn('status_verifikasi', function ($result) {
+                if ($result->verified_at) {
+                    return '<span class="badge badge-success"><i class="ti-check mr-1"></i>Terverifikasi</span>';
+                }
+                if ($result->verify_request_at) {
+                    return '<span class="badge badge-warning"><i class="ti-comment-alt mr-1"></i>Perlu Perbaikan</span>';
+                }
+                return '<span class="badge badge-secondary">Belum Diverifikasi</span>';
+            })
             ->editColumn('created_at', function ($result) {
                 return $result->created_at  ? with(new Carbon($result->created_at ))->format('d/m/Y H:i:s' ) : '';
             })
-            ->rawColumns(['action', 'status'])
+            ->rawColumns(['action', 'status', 'status_verifikasi'])
             ->make(true);
         }else{
             return abort(401);

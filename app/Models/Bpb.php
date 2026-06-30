@@ -53,6 +53,8 @@ class Bpb extends Model
             'bpb.publish',
             'bpb.po_id',
             'bpb.attachment_file',
+            'bpb.verified_at',
+            'bpb.verify_request_at',
             'users.name AS created',
             'spb.doc_no AS noSPB'
         )

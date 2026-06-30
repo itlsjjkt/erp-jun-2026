@@ -89,6 +89,7 @@
                         <th>Dibuat Oleh</th>
                         <th>Tgl Buat</th>
                         <th>Status</th>
+                        <th>Status Verifikasi</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -117,6 +118,7 @@
                     {data: 'created_by', name: 'created_by', searchable: false},
                     {data: 'created_at', name: 'created_at', searchable: false},
                     {data: 'status', name: 'status', searchable: false},
+                    {data: 'status_verifikasi', name: 'status_verifikasi', searchable: false, orderable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ],
                 "order": [[ 6, "DESC" ]]

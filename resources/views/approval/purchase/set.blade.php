@@ -126,7 +126,7 @@
                                             </td>
                                             <td>
                                                 <div class="input-group">
-                                                    <input type="number" min="1" name="qty[]" class="form-control" value="{{$item->qty}}" required onwheel="return false;"> 
+                                                    <input type="number" min="0.1" name="qty[]" class="form-control" value="{{$item->qty}}" required onwheel="return false;"> 
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text"> {{$item->measure}} </span>
                                                     </div>
