@@ -206,6 +206,8 @@ class LpbController extends Controller
             // $data['verified_by']     = Auth::user()->id;
             // $data['verified_at']     = now();
 
+            $data['uuid']           = (string) \Illuminate\Support\Str::uuid();
+
             $lpb = Lpb::create($data);
 
             $dataLPB = [];
@@ -607,6 +609,12 @@ class LpbController extends Controller
 
         $lpb = Lpb::getByID($id);
         $lpb_items   = Lpb::getProductItem($id['0']);
+
+        if (empty($lpb->uuid)) {
+            $lpb->uuid = (string) \Illuminate\Support\Str::uuid();
+            \Illuminate\Support\Facades\DB::table('lpb')->where('id', $lpb->id)->update(['uuid' => $lpb->uuid]);
+        }
+
         return view('logistic.lpb.print', compact('lpb', 'lpb_items'));
 
     }

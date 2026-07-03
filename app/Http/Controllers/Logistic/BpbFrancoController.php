@@ -158,6 +158,8 @@ class BpbFrancoController extends Controller
             $data['attachment_file'] = $filePath;
         }
 
+        $data['uuid'] = (string) Str::uuid();
+
         DB::beginTransaction();
         try {
 
@@ -1019,6 +1021,12 @@ class BpbFrancoController extends Controller
         $id = Hashids::decode($id);
         $bpb  = Bpb::findOrFail($id['0']);
         $bpb_items  = Bpb::getProductFrancoItem($id['0']);
+
+        if (empty($bpb->uuid)) {
+            $bpb->uuid = (string) Str::uuid();
+            $bpb->save();
+        }
+
         return view('logistic.bpb_franco.print', compact('bpb', 'bpb_items'));
     }
 

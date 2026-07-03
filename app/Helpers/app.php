@@ -4,6 +4,18 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\User;
 use Illuminate\Support\Facades\Gate;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
+function qr_data_uri($text, $size = 110)
+{
+	try {
+		$png = QrCode::format('png')->size($size)->margin(1)->generate($text);
+		return 'data:image/png;base64,' . base64_encode($png);
+	} catch (\Throwable $e) {
+		$svg = (string) QrCode::format('svg')->size($size)->margin(1)->generate($text);
+		return 'data:image/svg+xml;base64,' . base64_encode($svg);
+	}
+}
 
 
 function getStatusDPM($status, $raw = null, $hold = null)

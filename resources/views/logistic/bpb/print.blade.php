@@ -45,11 +45,17 @@
                     <td class="border-0" style="width:60%">
                         <span class="text-uppercase" style="font-weight:bold;font-size:18px">{{ config('app.company_name') }}</span><br>
                         {!! config('app.company_address') !!}<br>
-                        Telp: {{ config('app.company_telp') }} Website: {{ config('app.company_web') }}
+                        Telp: {{ config('app.company_telp') }} <br>
+                        Website: {{ config('app.company_web') }}
                     </td>
                     <td class="border-0 text-right" style="white-space:nowrap;">
                         <span style="font-weight:bold; font-size:17px; text-decoration:underline;">BUKTI PENERIMAAN BARANG</span><br>
                         {{ $bpb->doc_no }}
+                        @if(!empty($bpb->uuid))
+                            <br>
+                            {!! QrCode::size(85)->generate(route('verify.bpb', $bpb->uuid)) !!}
+                            <div style="font-size:10px;color:#666;">Scan untuk verifikasi keaslian</div>
+                        @endif
                     </td>
                 </tr>
             </table>

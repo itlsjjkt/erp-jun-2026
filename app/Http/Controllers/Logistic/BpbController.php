@@ -147,6 +147,8 @@ class BpbController extends Controller
         $data['verified_by']     = Auth::user()->id;
         $data['verified_at']     = now();
 
+        $data['uuid']            = (string) \Illuminate\Support\Str::uuid();
+
         DB::beginTransaction();
 
         try {
@@ -958,6 +960,12 @@ class BpbController extends Controller
         $id = Hashids::decode($id);
         $bpb = Bpb::getByID($id['0']);
         $bpb_items   = Bpb::getProductItem($id['0']);
+
+        if (empty($bpb->uuid)) {
+            $bpb->uuid = (string) \Illuminate\Support\Str::uuid();
+            \Illuminate\Support\Facades\DB::table('bpb')->where('id', $bpb->id)->update(['uuid' => $bpb->uuid]);
+        }
+
         return view('logistic.bpb.print', compact('bpb', 'bpb_items'));
     }
 
