@@ -444,7 +444,6 @@
 						<div class="bd p-20 mt-5" style="background: #f8f9fa;">
 							<div class="row">
 								<div class="col-sm-12">
-									<a class="btn btn-outline float-right" href="#" title="Print Data" onclick='printExternal("/logistic/lpb_print/{{ Hashids::encode($item->id) }}/print")'><i class="ti-printer icon-lg"></i></a>
 									<h6 class="font-weight-bold mB-10">{{ $item->doc_no }}</h6>
 									<hr>
 								</div>
@@ -715,7 +714,7 @@
 					<div class="bd p-20 mt-5" style="background: #f8f9fa;">
 						<div class="row">
 							<div class="col-sm-12">
-								<a class="btn btn-outline float-right" href="{{ route('logistic.bpb.show',Hashids::encode($item->id)) }}" title="Detail BPB"><i class="ti ti-eye text-success icon-lg"></i></a>
+								<a class="btn btn-outline float-right" href="{{ route('logistic.bpb_franco.show',Hashids::encode($item->id)) }}" title="Detail BPB"><i class="ti ti-eye text-success icon-lg"></i></a>
 								<h6 class="font-weight-bold mB-10">{{ $item->doc_no }}</h6>
 								<hr>
 							</div>
