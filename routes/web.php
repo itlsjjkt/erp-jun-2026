@@ -819,11 +819,11 @@ Route::get('export_instan_item_lpb_30Days', ['uses' => 'DashboardController@expo
 
 Route::get('POHaritaShipping/{id}/{uuid}', ['uses' => 'PoController@show', 'as' => 'po_off_auth.show'] );
 
-Route::get('PrintPO/{doc_no}/{id}/{type}/{uuid}', ['uses' => 'PoController@print', 'as' => 'print_po.no_auth'] );
-
 // VERIFIKASI DOKUMEN VIA QR (PUBLIK, TANPA LOGIN)
 Route::get('verify/lpb/{uuid}', ['uses' => 'DocumentVerificationController@lpb', 'as' => 'verify.lpb'] );
 Route::get('verify/bpb/{uuid}', ['uses' => 'DocumentVerificationController@bpb', 'as' => 'verify.bpb'] );
+
+Route::get('PrintPO/{doc_no}/{id}/{type}/{uuid}', ['uses' => 'PoController@print', 'as' => 'print_po.no_auth'] );
 
 // UNTUK MONITORING ITEM BPB
 Route::get('shipping/getAllDataItemBpb', ['uses' =>'API\ApiController@getAllDataItemBpb','as' => 'api.shipping.get_all_data_item_bpb']);

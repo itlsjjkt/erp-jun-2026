@@ -26,13 +26,13 @@
 
 	<div class="col-sm-12">
         <div class="bgc-white p-30 bd">
-            @if(!Gate::allows('inventory_monitoring'))
+            {{-- @if(!Gate::allows('inventory_monitoring')) --}}
                 <h6><a class="float-left" href="{{ route('logistic.inventory.index') }}"><i class="ti-arrow-left mR-10"></i></a> Inventory</h6>
                 <a href="#" class="btn btn-outline border-dark fsz-sm fw-600  float-right mr-2 " data-toggle="collapse" data-target="#filter">
                     <i class="fa fa-file-excel-o text-success"></i> Export
                 </a>
                 <hr class="mB-30">
-            @endif
+            {{-- @endif --}}
             <div class="collapse mB-20" id="filter" aria-expanded="false">
                 <form class="form-horizontal" action="{{ route('logistic.inventory.history.export',$inventory->id)}}" method='GET'>
                     {{ csrf_field() }}

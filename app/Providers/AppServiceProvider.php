@@ -20,7 +20,11 @@ class AppServiceProvider extends ServiceProvider
            define('ADMIN', config('variables.APP_ADMIN', 'admin'));
         }
         require_once base_path('resources/macros/form.php');
-
+        
+        if (config('app.env') !== 'local') {
+            $this->app['request']->server->set('HTTPS', true);
+        }
+       
         config(['app.locale' => 'id']);
         Carbon::setLocale('id');
         date_default_timezone_set('Asia/Jakarta');

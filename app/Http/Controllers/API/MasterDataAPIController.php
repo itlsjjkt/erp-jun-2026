@@ -83,34 +83,46 @@ class MasterDataAPIController extends Controller
         return response()->json($list_locations, 200);
     }
 
+    public function getProductByLocation (Request $request)
+    {
+        $query = DB::table('master_item_products as p')
+            ->select([
+                'p.*',
+                'i.name as category_name',
+                'b.name as brand_name',
+                'm.name as measure_name',
+            ])
+            ->where('p.status', 1)
+            ->whereIn('p.id', function ($sub) use ($request) {
+                $sub->select('product_id')
+                    ->from('inventories')
+                    ->where('location_id', $request->input('location_id'));
+            })
+            ->leftJoin('master_items as i', function ($join) {
+                $join->on('i.id', '=', 'p.item_id');
+            })
+            ->leftJoin('master_item_brands as b', function ($join) {
+                $join->on('b.id', '=', 'p.brand_id')
+                    ->where('b.status', 1);
+            })
+            ->leftJoin('measures as m', function ($join) {
+                $join->on('m.id', '=', 'p.measure_id')
+                    ->where('m.status', 1);
+            });
+
+        return response()->json($query->orderBy('p.id')->get(), 200);
+    }
+
     public function getItemDetails(Request $request)
     {
         $query = DB::table('master_item_products as p')
             ->select([
-                'p.id',
-                'p.name',
-                'p.measure_id',
-                'p.code',
-                'p.status',
-                'p.brand_id',
-                'p.part_number',
-                'p.description',
-                'p.item_id',
-                'p.measure_inventory',
-                'p.conversion', 
+                'p.*',
                 'i.name as category_name',
-                'i.status as category_status',
                 'b.name as brand_name',
-                'b.status as brand_status',
                 'm.name as measure_name',
-                'm.status as measure_status',
             ])
             ->where('p.status', 1)
-            ->whereIn('p.id', function ($sub) {
-                $sub->select('product_id')
-                    ->from('inventories')
-                    ->where('location_id', 9);
-            })
             ->leftJoin('master_items as i', function ($join) {
                 $join->on('i.id', '=', 'p.item_id');
             })
@@ -127,8 +139,8 @@ class MasterDataAPIController extends Controller
             $keyword = '%' . strtolower($request->input('search')) . '%';
             $query->where(function ($q) use ($keyword) {
                 $q->whereRaw('LOWER(p.name) like ?', [$keyword])
-                ->orWhereRaw('LOWER(p.description) like ?', [$keyword])
-                ->orWhereRaw('LOWER(p.part_number) like ?', [$keyword]);
+                  ->orWhereRaw('LOWER(p.description) like ?', [$keyword])
+                  ->orWhereRaw('LOWER(p.part_number) like ?', [$keyword]);
             });
         }
 

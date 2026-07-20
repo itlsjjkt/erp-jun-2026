@@ -20,11 +20,12 @@ Route::middleware('erp.key')->group(function () {
     Route::get('/users/lookup', [ErpUserApiController::class, 'lookup']);
 
     // Master Data
-    Route::get('item-details', [MasterDataAPIController::class, 'getItemDetails']);
     Route::get('products', [MasterDataAPIController::class, 'products']);
     Route::get('companies', [MasterDataAPIController::class, 'companies']);
     Route::get('measures', [MasterDataAPIController::class, 'measures']);
     Route::get('locations', [MasterDataAPIController::class, 'locations']);
+    Route::get('item-details', [MasterDataAPIController::class, 'getItemDetails']);
+    Route::get('get-product-by-location', [MasterDataAPIController::class, 'getProductByLocation']);
     
     // Push SO Ke ERP
     Route::post('/inventory-adjustments', [InventoryAdjustmentController::class, 'store']);
