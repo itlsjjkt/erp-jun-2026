@@ -421,9 +421,13 @@ class PoController extends Controller
 
                     // PERBAIKAN
                     $subTotal = 0;
-                    for($j=0;$j < count($request->get('product_id'));$j++){
-                        $subTotal += ($request->get('qty')[$j] * str_replace(",", "", $request->get('price')[$j]));
+                    for($j = 0; $j < count($request->get('product_id')); $j++){
+                        $subTotal += (
+                            (float) str_replace(",", "", $request->get('qty')[$j]) *
+                            (float) str_replace(",", "", $request->get('price')[$j])
+                        );
                     }
+
                     if($request->get('discount_type')== '0') $discAmount = str_replace(",", "", $request->get('discount_amount'));
                     else $discAmount=0;
 
